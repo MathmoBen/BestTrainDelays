@@ -1,10 +1,12 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
+import os
 
 st.markdown('# Some Analysis from our Explored Data')
 
-st.image('https://github.com/MathmoBen/BestTrainDelays/blob/main/streamlit/images/delayplot.png?raw=true', caption='The most common PFPI (Process for Performance Improvement) delays in minutes.')
+#st.image('https://github.com/MathmoBen/BestTrainDelays/blob/main/streamlit/images/delayplot.png?raw=true', caption='The most common PFPI (Process for Performance Improvement) delays in minutes.')
+st.image(os.path.abspath('images/delayplot.png'), caption='The most common PFPI (Process for Performance Improvement) delays in minutes.')
 
 st.image('https://github.com/MathmoBen/BestTrainDelays/blob/main/streamlit/images/codesplot.png?raw=true', caption='Chart showing the distribution of the delays across the different types of services operating on the London Overground in recent years.')
 
