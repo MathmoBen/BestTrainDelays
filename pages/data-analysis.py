@@ -18,4 +18,4 @@ st.image(os.path.abspath('images/groupsplot.png'), caption='Chart showing the di
 
 #st.image('https://github.com/MathmoBen/BestTrainDelays/blob/main/streamlit/images/unitplot.png?raw=true', caption='Chart showing the distribution of the delays across the different types of rolling stock operating on the London Overground in recent years.')
 
-st.image(os.path.abspath('images/unitplot.png), caption='Chart showing the distribution of the delays across the different types of rolling stock operating on the London Overground in recent years.')
+st.image(os.path.abspath('images/unitplot.png'), caption='Chart showing the distribution of the delays across the different types of rolling stock operating on the London Overground in recent years.')
