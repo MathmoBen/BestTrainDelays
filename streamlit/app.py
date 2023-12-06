@@ -15,14 +15,14 @@ st.set_page_config(page_title= "Ex-stream-ly Cool App",
     )
 
 # model = pickle.load(open(os.path.abspath("streamlit/Models/XGBoost_MSE_on_test_with_log_transf_1_27.sav"), 'rb'))
-model = pickle.load(open(os.path.abspath("streamlit/Models/model_lin.pkl"), 'rb'))
+model = pickle.load(open(os.path.abspath("streamlit/Models/XGBoost_RMSE_on_test_with_log_transf_rmse_1_64.sav"), 'rb'))
 pipe = pickle.load(open(os.path.abspath("streamlit/Models/pipe.pkl"), 'rb'))
 
 st.markdown("""# Train Delay Estimator
 """)
 
 
-df = pd.read_csv('/home/lewis/code/TrainDelays/BestTrainDelays/streamlit/lookup_for_streamlit.csv')
+df = pd.read_csv(os.path.abspath('streamlit/lookup_for_streamlit.csv'))
 first_df = df[['Station Name']]
 
 
@@ -54,7 +54,7 @@ train_service_group_code = st.selectbox(
 Applicable_Timetable = st.checkbox('Applicable-Timetable')
 
 Incident_reason = st.selectbox('Previous train incident reason',
-             ('A', 'D', 'F', 'I', 'J','M', 'O', 'P', 'Q', 'R','T', 'V', 'X', 'Z'))
+             ('A', 'D', 'F', 'I', 'J','M', 'O', 'Q', 'R','T', 'V', 'X', 'Z'))
 
 
 st.write('A: Freight Terminal Operations Cause,\
@@ -63,7 +63,6 @@ st.write('A: Freight Terminal Operations Cause,\
         I & J : Infrastructure reasons,\
         M & N : Mechaical/Fleet Engineer causes,\
         O : Network Rail Operating cause, \
-        P : Planned delays, \
         Q : Network Rail Non-Operating, \
         R : Station Operations,\
         T : Passenger Operations, \
