@@ -24,7 +24,7 @@ st.markdown("""
 col1, mid, col2 = st.columns([1,2,20],gap="medium")
 
 with col1:
-    st.image(os.path.abspath('streamlit/images/ltrudeau.jpeg'), width=105)
+    st.image(os.path.abspath('images/ltrudeau.jpeg'), width=105)
 
 with col2:
     st.markdown("**Lewis Trudeau**")
@@ -40,7 +40,7 @@ st.write("#")
 # create two cols, one for profile photo and the other with the social networks links
 col1, mid, col2 = st.columns([1,2,20],gap="medium")
 with col1:
-    st.image(os.path.abspath('streamlit/images/dramella.png'), width=105)
+    st.image(os.path.abspath('images/dramella.png'), width=105)
 
 with col2:
     st.markdown("**Debora Ramella**")
@@ -59,7 +59,7 @@ st.write("#")
 col1, mid, col2 = st.columns([1,2,20],gap="medium")
 
 with col1:
-    st.image(os.path.abspath('streamlit/images/ben.jpeg'), width=105)
+    st.image(os.path.abspath('images/ben.jpeg'), width=105)
 
 with col2:
     st.markdown("**Ben Fairbairn**")
@@ -78,7 +78,7 @@ st.write("#")
 col1, mid, col2 = st.columns([1,2,20],gap="medium")
 
 with col1:
-    st.image(os.path.abspath('streamlit/images/joel.jpeg'), width=105)
+    st.image(os.path.abspath('images/joel.jpeg'), width=105)
 
 with col2:
     st.markdown("**Joel Okwuchukwu**")
