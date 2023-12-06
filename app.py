@@ -25,20 +25,27 @@ st.markdown("""# Train Delay Estimator
 df = pd.read_csv(os.path.abspath('lookup_for_streamlit.csv'))
 first_df = df[['Station Name']]
 
+col1, col2, col3, col4 = st.columns(4)
 
-origin = st.selectbox(
-     'Select your travel origin ', first_df)
+with col1:
+    origin = st.selectbox(
+     'Select your travel origin', first_df)
 
-origin_date = st.date_input('origin_date', datetime.date(2023, 6, 19))
+with col2:
+    origin_date = st.date_input('origin_date', datetime.date.today())
 
-origin_time = st.time_input('origin_time', datetime.time(1, 30))
+with col3:
+    origin_time = st.time_input('origin_time', datetime.time(15, 00))
 
+col4, col5, col6 = st.columns(3)
+with col4:
+    destination = st.selectbox('Select your travel destination ', first_df)
 
-destination = st.selectbox('Select your travel destination ', first_df)
+with col5:
+    destination_date = st.date_input('destination_date', datetime.date.today())
 
-destination_date = st.date_input('destination_date', datetime.date(2023, 6, 19))
-
-destination_time = st.time_input('destination_time', datetime.time(1, 30))
+with col6:
+    destination_time = st.time_input('destination_time', datetime.time(15, 30))
 
 
 train_service_code = st.selectbox(
@@ -51,7 +58,6 @@ train_service_group_code = st.selectbox(
     'Pick a previously affected group code',
     ('EK01', 'EK02', 'EK03', 'EK04', 'EK05', 'EK99'))
 
-Applicable_Timetable = st.checkbox('Applicable-Timetable')
 
 Incident_reason = st.selectbox('Previous train incident reason',
              ('A', 'D', 'F', 'I', 'J','M', 'O', 'Q', 'R','T', 'V', 'X', 'Z'))
@@ -74,6 +80,9 @@ st.write('A: Freight Terminal Operations Cause,\
 
 train_class_unit = st.selectbox('Pick a previously affected train unit class',
              ('313', '317', '315', '321','375', '378', '710'))
+
+
+Applicable_Timetable = st.checkbox('Applicable-Timetable')
 
 event_code = st.checkbox('Is the delay automatically logged?')
 
