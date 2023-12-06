@@ -16,7 +16,7 @@ st.set_page_config(page_title= "Ex-stream-ly Cool App",
 
 # model = pickle.load(open(os.path.abspath("streamlit/Models/XGBoost_MSE_on_test_with_log_transf_1_27.sav"), 'rb'))
 model = pickle.load(open(os.path.abspath("streamlit/Models/XGBoost_RMSE_on_test_with_log_transf_rmse_1_64.sav"), 'rb'))
-pipe = pickle.load(open(os.path.abspath("streamlit/Models/pipe.pkl"), 'rb'))
+pipe = pickle.load(open(os.path.abspath("streamlit/Models/pipe_dump.pkl"), 'rb'))
 
 st.markdown("""# Train Delay Estimator
 """)
