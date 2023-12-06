@@ -1,6 +1,11 @@
 ####################################### Libraries ###############################
 import streamlit as st
+import os
 #################################################################################
+st.set_page_config(
+        page_title="About us",
+        page_icon = "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.networkrail.co.uk/"
+)
 
 # set Title
 st.title("About us")
@@ -19,10 +24,10 @@ st.markdown("""
 col1, mid, col2 = st.columns([1,2,20],gap="medium")
 
 with col1:
-    st.image('images/ltrudeau.jpeg', width=100,caption='Lewis Trudeau')
+    st.image(os.path.abspath('streamlit/images/ltrudeau.jpeg'), width=105)
 
 with col2:
-    st.text(" ")
+    st.markdown("**Lewis Trudeau**")
     st.write("""
 <img src="https://github.githubassets.com/favicons/favicon.svg" width="20" border-radius="50"> **Github profile**: https://github.com/LewisT1424
 
@@ -35,10 +40,10 @@ st.write("#")
 # create two cols, one for profile photo and the other with the social networks links
 col1, mid, col2 = st.columns([1,2,20],gap="medium")
 with col1:
-    st.image('images/dramella.png', width=100,caption='Debora Ramella')
+    st.image(os.path.abspath('streamlit/images/dramella.png'), width=105)
 
 with col2:
-    st.text(" ")
+    st.markdown("**Debora Ramella**")
     st.markdown("""
  <img class="image backArrow" src="https://github.githubassets.com/favicons/favicon.svg" width="20"> **Github profile**: https://github.com/dramella
 
@@ -54,10 +59,10 @@ st.write("#")
 col1, mid, col2 = st.columns([1,2,20],gap="medium")
 
 with col1:
-    st.image('images/ben.jpeg', width=100,caption='Ben Fairbairn')
+    st.image(os.path.abspath('streamlit/images/ben.jpeg'), width=105)
 
 with col2:
-    st.text(" ")
+    st.markdown("**Ben Fairbairn**")
     st.write("""
  <img src="https://github.githubassets.com/favicons/favicon.svg" width="20"> **Github profile**: https://github.com/MathmoBen
 
@@ -73,10 +78,10 @@ st.write("#")
 col1, mid, col2 = st.columns([1,2,20],gap="medium")
 
 with col1:
-    st.image('images/joel.jpeg', width=100,caption='Joel Okwuchukwu')
+    st.image(os.path.abspath('streamlit/images/joel.jpeg'), width=105)
 
 with col2:
-    st.text(" ")
+    st.markdown("**Joel Okwuchukwu**")
     st.write("""
  <img src="https://github.githubassets.com/favicons/favicon.svg" width="20"> **Github profile**: https://github.com/YvngJoey101
 
