@@ -6,7 +6,7 @@ import pickle
 #from scripts.preprocessing.preprocess import preprocessing_pipe
 import datetime
 import os
-import xgboost
+import flaml
 
 st.set_page_config(page_title= "Ex-stream-ly Cool App",
      page_icon="🧊",
