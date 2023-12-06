@@ -5,7 +5,8 @@ import numpy as np
 import pickle
 #from scripts.preprocessing.preprocess import preprocessing_pipe
 import datetime
-
+import os
+import xgboost
 
 st.set_page_config(page_title= "Ex-stream-ly Cool App",
      page_icon="🧊",
@@ -13,9 +14,9 @@ st.set_page_config(page_title= "Ex-stream-ly Cool App",
      initial_sidebar_state="expanded"
     )
 
-# model = pickle.load(open("/home/yvngjoey/code/MathmoBen/TrainDelays/Model/model.pkl", 'rb'))
-# pipe = pickle.load(open("/home/yvngjoey/code/MathmoBen/TrainDelays/Model/pipe.pkl", 'rb'))
-
+# model = pickle.load(open(os.path.abspath("streamlit/Models/XGBoost_MSE_on_test_with_log_transf_1_27.sav"), 'rb'))
+model = pickle.load(open(os.path.abspath("streamlit/Models/model_lin.pkl"), 'rb'))
+pipe = pickle.load(open(os.path.abspath("streamlit/Models/pipe.pkl"), 'rb'))
 
 st.markdown("""# Train Delay Estimator
 """)
@@ -77,6 +78,10 @@ train_class_unit = st.selectbox('Pick a previously affected train unit class',
 
 event_code = st.checkbox('Is the delay automatically logged?')
 
+
+for i in range(5):
+    st.text("")
+
 if Applicable_Timetable:
     app_time = 'Y'
 else:
@@ -87,7 +92,6 @@ if event_code:
 else:
     code ='M'
 
-st.write(destination)
 
 lat_OR = df[df['Station Name'] == origin]['Latitude']
 lon_OR = df[df['Station Name'] == origin]['Longitude']
@@ -124,7 +128,6 @@ dest_hour_cos = math.cos(2 * math.pi * des_hour / 24)
 dest_minute_sin = math.sin(2 * math.pi * des_minute / 60)
 dest_minute_cos = math.cos(2 * math.pi * des_minute / 60)
 
-st.write(origin_date.month)
 if origin_date.month == 12 and origin_date.day == 26:
     dayofweek = 'BD'
 elif origin_date.weekday() == 6:
@@ -143,22 +146,23 @@ data = pd.DataFrame(data = { 'Lat_OR': [float(lat_OR)],
                             'DEST_DAY_SIN':[dest_day_sin],'DEST_DAY_COS':[dest_day_cos],
                             'DEST_HOUR_SIN':[dest_hour_sin],'DEST_HOUR_COS':[dest_hour_cos],
                             'DEST_MINUTE_SIN':[dest_minute_sin],'DEST_MINUTE_COS':[dest_minute_cos],
-                     'Lat_DES': [float(lat_DES)],
+                            'Lat_DES': [float(lat_DES)],
                             'Lon_DES': [float(lon_DES)],
                     'TRAIN_SERVICE_CODE_AFFECTED' : [train_service_code],\
                      'SERVICE_GROUP_CODE_AFFECTED' : [train_service_group_code], 'APP_TIMETABLE_FLAG_AFF' :[app_time],
                      'INCIDENT_REASON' : [Incident_reason],\
-                         'UNIT_CLASS_AFFECTED' : [train_class_unit], 'PERFORMANCE_EVENT_CODE' : [code]  }
+                         'UNIT_CLASS_AFFECTED' : [train_class_unit], 'PERFORMANCE_EVENT_CODE' : [code], 'ENGLISH_DAY_TYPE':[dayofweek]  }
 )
 
-st.dataframe(data)
-st.write(data.shape)
 
 
+# st.dataframe(data)
+if st.button('Predict'):
+    processed = pipe.transform(data)
+    # st.write(processed)
 
-
-
-
+    result = model.predict(processed)
+    st.write(f'This train is estimated to be delayed by {round(result[0],1)} minutes')
 # # We take the features we have selected
 # # We convert them from easy-to-understand strings into a format the model expects
 # # e.g. We have a dataframe that maps the string 'Hoxton' to 0.324, 0.456456
