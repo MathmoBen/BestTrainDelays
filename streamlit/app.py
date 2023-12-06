@@ -75,12 +75,84 @@ st.write('A: Freight Terminal Operations Cause,\
 train_class_unit = st.selectbox('Pick a previously affected train unit class',
              ('313', '317', '315', '321','375', '378', '710'))
 
-event_code = st.checkbox('PERFORMANCE_EVENT_CODE')
+event_code = st.checkbox('Is the delay automatically logged?')
 
+if Applicable_Timetable:
+    app_time = 'Y'
+else:
+    app_time = 'N'
 
+if event_code:
+    code = 'A'
+else:
+    code ='M'
 
+st.write(destination)
 
+lat_OR = df[df['Station Name'] == origin]['Latitude']
+lon_OR = df[df['Station Name'] == origin]['Longitude']
+lat_DES = df[df['Station Name'] == destination]['Latitude']
+lon_DES = df[df['Station Name'] == destination]['Longitude']
 
+ori_month = origin_date.month
+ori_day = origin_date.day
+ori_hour = origin_time.hour
+ori_minute = origin_time.minute
+
+des_month = destination_date.month
+des_day = destination_date.day
+des_hour = destination_time.hour
+des_minute = destination_time.minute
+
+import math
+
+orig_month_sin = math.sin(2 * math.pi * ori_month / 12)
+orig_month_cos = math.cos(2 * math.pi * ori_month / 12)
+orig_day_sin = math.sin(2 * math.pi * ori_day / 31)
+orig_day_cos = math.cos(2 * math.pi * ori_day / 31)
+orig_hour_sin = math.sin(2 * math.pi * ori_hour / 24)
+orig_hour_cos = math.cos(2 * math.pi * ori_hour / 24)
+orig_minute_sin = math.sin(2 * math.pi * ori_minute / 60)
+orig_minute_cos = math.cos(2 * math.pi * ori_minute / 60)
+
+dest_month_sin = math.sin(2 * math.pi * des_month / 12)
+dest_month_cos = math.cos(2 * math.pi * des_month / 12)
+dest_day_sin = math.sin(2 * math.pi * des_day / 31)
+dest_day_cos = math.cos(2 * math.pi * des_day / 31)
+dest_hour_sin = math.sin(2 * math.pi * des_hour / 24)
+dest_hour_cos = math.cos(2 * math.pi * des_hour / 24)
+dest_minute_sin = math.sin(2 * math.pi * des_minute / 60)
+dest_minute_cos = math.cos(2 * math.pi * des_minute / 60)
+
+st.write(origin_date.month)
+if origin_date.month == 12 and origin_date.day == 26:
+    dayofweek = 'BD'
+elif origin_date.weekday() == 6:
+    dayofweek = 'SU'
+elif origin_date.weekday() == 5:
+    dayofweek = 'SA'
+else:
+    dayofweek = 'WD'
+
+data = pd.DataFrame(data = { 'Lat_OR': [float(lat_OR)],
+                            'Lon_OR': [float(lon_OR)],'ORIG_MONTH_SIN':[orig_month_sin],'ORIG_MONTH_COS':[orig_month_cos],
+                            'ORIG_DAY_SIN':[orig_day_sin],'ORIG_DAY_COS':[orig_day_cos],
+                            'ORIG_HOUR_SIN':[orig_hour_sin],'ORIG_HOUR_COS':[orig_hour_cos],
+                            'ORIG_MINUTE_SIN':[orig_minute_sin],'ORIG_MINUTE_COS':[orig_minute_cos],
+                            'DEST_MONTH_SIN':[dest_month_sin],'DEST_MONTH_COS':[dest_month_cos],
+                            'DEST_DAY_SIN':[dest_day_sin],'DEST_DAY_COS':[dest_day_cos],
+                            'DEST_HOUR_SIN':[dest_hour_sin],'DEST_HOUR_COS':[dest_hour_cos],
+                            'DEST_MINUTE_SIN':[dest_minute_sin],'DEST_MINUTE_COS':[dest_minute_cos],
+                     'Lat_DES': [float(lat_DES)],
+                            'Lon_DES': [float(lon_DES)],
+                    'TRAIN_SERVICE_CODE_AFFECTED' : [train_service_code],\
+                     'SERVICE_GROUP_CODE_AFFECTED' : [train_service_group_code], 'APP_TIMETABLE_FLAG_AFF' :[app_time],
+                     'INCIDENT_REASON' : [Incident_reason],\
+                         'UNIT_CLASS_AFFECTED' : [train_class_unit], 'PERFORMANCE_EVENT_CODE' : [code]  }
+)
+
+st.dataframe(data)
+st.write(data.shape)
 
 
 
@@ -148,18 +220,6 @@ event_code = st.checkbox('PERFORMANCE_EVENT_CODE')
 
 
 
-# import math
-# sin_cos_df = df2[['ORIG_MONTH','ORIG_DAY','ORIG_HOUR','ORIG_MINUTE','DEST_MONTH','DEST_DAY','DEST_HOUR','DEST_MINUTE']]
-
-# def col_transform(col_name):
-#     df[f'{col_name}_SIN'] = sin_cos_df[f'{col_name}'].apply(lambda x: math.sin(2 * math.pi * x / 60))
-#     df[f'{col_name}_COS'] = sin_cos_df[f'{col_name}'].apply(lambda x: math.cos(2 * math.pi * x / 60))
-#     df.drop(columns=[col_name], inplace=True)
-
-
-
-# for col in sin_cos_df.columns:
-#     col_transform(col)
 
 
 
