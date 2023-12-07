@@ -14,6 +14,12 @@ st.set_page_config(
         )
 ##########################HTML and CSS stuff for header ##########################
 
+background_style ="""
+.stApp {
+    background-color: white;
+    color: black;
+}
+    """
 
 html = """
 <div class="tw-relative tw-bg-primary tw-flex tw-items-end tw-h-40 md:tw-h-48 lg:tw-h-56 xl:tw-h-64 2xl:tw-h-72 snipcss-SsN7R">
@@ -243,6 +249,8 @@ h1 {
 st.write(f'{html}', unsafe_allow_html=True)
 
 st.write(f'<style>{css}</style>', unsafe_allow_html=True)
+st.markdown(f'<style>{background_style}</style>', unsafe_allow_html=True)
+
 
 ################################################################################
 
