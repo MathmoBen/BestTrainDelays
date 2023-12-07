@@ -6,118 +6,74 @@ import pickle
 #from scripts.preprocessing.preprocess import preprocessing_pipe
 import datetime
 import os
-import flaml
+import xgboost
 
-st.set_page_config(
-        page_title="Home",
-        page_icon = "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.networkrail.co.uk/",
-        layout="wide",
-        initial_sidebar_state="expanded"
-        )
+st.set_page_config(page_title= "Ex-stream-ly Cool App",
+     page_icon="🧊",
+     layout="wide",
+     initial_sidebar_state="expanded"
+    )
 
-
-# CSS  = '''
-# <style>
-
-# h1 {color:red;}.stApp {
-
-# background-image: url(https://www.railadvent.co.uk/2017/12/night-overground-train-services-have-begun-in-london.html);
-# background-size: cover;
-
-# }
-# </style>
-# '''
-
-
-
-
-
-# model = pickle.load(open(os.path.abspath("Models/XGBoost_MSE_on_test_with_log_transf_1_27.sav"), 'rb'))
-model = pickle.load(open(os.path.abspath("Models/XGBoost_RMSE_on_test_with_log_transf_rmse_1_64.sav"), 'rb'))
-pipe = pickle.load(open(os.path.abspath("Models/pipe_dump.pkl"), 'rb'))
+# model = pickle.load(open(os.path.abspath("streamlit/Models/XGBoost_MSE_on_test_with_log_transf_1_27.sav"), 'rb'))
+model = pickle.load(open(os.path.abspath("streamlit/Models/XGBoost_RMSE_on_test_with_log_transf_rmse_1_64.sav"), 'rb'))
+pipe = pickle.load(open(os.path.abspath("streamlit/Models/pipe_dump.pkl"), 'rb'))
 
 st.markdown("""# Train Delay Estimator
 """)
 
 
-df = pd.read_csv(os.path.abspath('lookup_for_streamlit.csv'))
+df = pd.read_csv(os.path.abspath('streamlit/lookup_for_streamlit.csv'))
 first_df = df[['Station Name']]
 
-col1, col2, col3 = st.columns(3)
 
-with col1:
-    origin = st.selectbox(
-     'Select your travel origin', first_df)
+origin = st.selectbox(
+     'Select your travel origin ', first_df, index=76)
 
-with col2:
-    origin_date = st.date_input('Origin date', datetime.date.today())
+origin_date = st.date_input('origin_date', datetime.date.today())
 
-with col3:
-    origin_time = st.time_input('Origin time', datetime.time(15, 00))
-
-col4, col5, col6 = st.columns(3)
-with col4:
-    destination = st.selectbox('Select your travel destination ', first_df)
-
-with col5:
-    destination_date = st.date_input('Destination date', datetime.date.today())
-
-with col6:
-    destination_time = st.time_input('Destination time', datetime.time(15, 30))
+origin_time = st.time_input('origin_time', datetime.time(15, 30))
 
 
+destination = st.selectbox('Select your travel destination ', first_df, index=72)
 
-col7, col8 = st.columns(2)
+destination_date = st.date_input('destination_date', datetime.date.today())
 
-with col7:
-    train_service_code = st.selectbox(
+destination_time = st.time_input('destination_time', datetime.time(16, 00))
+
+
+train_service_code = st.selectbox(
     'Pick a train service code',
-    ('22214000 -- Richmond - Camden Road - Stratford', '22204000 -- Willesden - Kensington - Clapham Jct',
-    '21921000 -- Gospel Oak - Barking', '25234001 -- London Liverpool St - Cheshunt/Enfield Town (Peak)',
-    '21234001 -- London Liverpool St - Cheshunt/Enfield Town (Off Peak)', '21252001 -- London Overground (West Anglia) ECS',
-    '25235001 -- London Liverpool St - Chingford Services (Peak)', '22216000 -- London Euston - Watford Junction (D.C Lines)',
-    '22206000 -- Queens Rd Peckham - Clapham Jct SLL', '21235001 -- London Euston - Watford Junction (D.C Lines)',
-    '22218000 -- ELL : (Tfl Infrastructure only-)', '22215003 -- ELL : New X Gate-C Palace/W Croydon',
-    '21237001 -- Romford - Upminster', '22215002 -- ELL (ECS Movements)'))
+    ('22214000', '22204000', '21921000', '25234001', '21234001', '21252001',
+       '25235001', '22216000', '22206000', '21235001', '22218000', '22215003',
+       '21237001', '22215002'))
 
-with col8:
-    train_service_group_code = st.selectbox(
-    'Select a train service group code',
-    ('EK01 -- Orbitals',
-     'EK02 -- London-Watford (DC lines)',
-     'EK03 -- East London Lines',
-     'EK04 -- West Anglia Inner',
-     'EK05 -- Romford-Upminster',
-     'EK99 -- Miscellaneous '))
+train_service_group_code = st.selectbox(
+    'Pick a previously affected group code',
+    ('EK01', 'EK02', 'EK03', 'EK04', 'EK05', 'EK99'), index=2)
+
+Applicable_Timetable = st.checkbox('Applicable-Timetable')
+
+Incident_reason = st.selectbox('Previous train incident reason',
+             ('A', 'D', 'F', 'I', 'J','M', 'O', 'Q', 'R','T', 'V', 'X', 'Z'))
 
 
-col9, col11 = st.columns(2)
+st.write('A: Freight Terminal Operations Cause,\
+        D : Holding codes, \
+        F : Freight Operating Causes, \
+        I & J : Infrastructure reasons,\
+        M & N : Mechaical/Fleet Engineer causes,\
+        O : Network Rail Operating cause, \
+        Q : Network Rail Non-Operating, \
+        R : Station Operations,\
+        T : Passenger Operations, \
+        V : External events, \
+        X : External events linked to the network rail, \
+        Y : Reactionary delays, Z : Unexplained events/delays'
+)
 
 
-with col9:
-    Incident_reason = st.selectbox('Train incident reasons',
-             ('A - Freight Terminal Operations Cause',
-              'D - Holding codes',
-              'F - Freight Operating Causes',
-              'I - Infrastructure reasons',
-              'J - Infrastructure reasons',
-              'M - Mechaical/Fleet Engineer causes',
-              'O - Network Rail Operating cause',
-              'Q - Network Rail Non-Operating',
-              'R - Station Operations',
-              'T - Passenger Operations',
-              'V - External events',
-              'X - External events linked to the network rail',
-              'Z - Unexplained events/delays'))
-
-
-
-with col11:
-    train_class_unit = st.selectbox('Select a train unit class',
-             ('313', '317', '315', '321','375', '378', '710'))
-
-
-Applicable_Timetable = st.checkbox('Is train on official performance records?')
+train_class_unit = st.selectbox('Pick a previously affected train unit class',
+             ('313', '317', '315', '321','375', '378', '710'), index=5)
 
 event_code = st.checkbox('Is the delay automatically logged?')
 
@@ -171,7 +127,13 @@ dest_hour_cos = math.cos(2 * math.pi * des_hour / 24)
 dest_minute_sin = math.sin(2 * math.pi * des_minute / 60)
 dest_minute_cos = math.cos(2 * math.pi * des_minute / 60)
 
-if origin_date.month == 12 and origin_date.day == 26:
+bank_holidays = [datetime.date(2023, 1, 2), datetime.date(2023, 4, 7), datetime.date(2023, 4, 10), datetime.date(2023, 5, 1),
+                 datetime.date(2023, 5, 8), datetime.date(2023, 5, 29), datetime.date(2023, 8, 28), datetime.date(2023, 12, 25),
+                 datetime.date(2024, 1, 1), datetime.date(2024, 3, 29), datetime.date(2024, 4, 1), datetime.date(2024, 5, 6),
+                 datetime.date(2024, 5, 27), datetime.date(2024, 8, 26), datetime.date(2024, 12, 25), datetime.date(2024, 12, 26)]
+if origin_date in bank_holidays:
+    dayofweek = 'BH'
+elif origin_date.month == 12 and origin_date.day == 26:
     dayofweek = 'BD'
 elif origin_date.weekday() == 6:
     dayofweek = 'SU'
@@ -191,13 +153,13 @@ data = pd.DataFrame(data = { 'Lat_OR': [float(lat_OR)],
                             'DEST_MINUTE_SIN':[dest_minute_sin],'DEST_MINUTE_COS':[dest_minute_cos],
                             'Lat_DES': [float(lat_DES)],
                             'Lon_DES': [float(lon_DES)],
-                    'TRAIN_SERVICE_CODE_AFFECTED' : [train_service_code[:8]],\
-                     'SERVICE_GROUP_CODE_AFFECTED' : [train_service_group_code[:4]], 'APP_TIMETABLE_FLAG_AFF' :[app_time],
-                     'INCIDENT_REASON' : [Incident_reason[0]],\
+                    'TRAIN_SERVICE_CODE_AFFECTED' : [train_service_code],\
+                     'SERVICE_GROUP_CODE_AFFECTED' : [train_service_group_code], 'APP_TIMETABLE_FLAG_AFF' :[app_time],
+                     'INCIDENT_REASON' : [Incident_reason],\
                          'UNIT_CLASS_AFFECTED' : [train_class_unit], 'PERFORMANCE_EVENT_CODE' : [code], 'ENGLISH_DAY_TYPE':[dayofweek]  }
 )
 
-
+st.dataframe(data)
 
 # st.dataframe(data)
 if st.button('Predict'):
@@ -205,7 +167,7 @@ if st.button('Predict'):
     # st.write(processed)
 
     result = model.predict(processed)
-    st.write(f'This train is estimated to be delayed by {round(float(result[0]), 1)} minutes')
+    st.write(f'This train is estimated to be delayed by {round(float(result[0]),1)} minutes')
 # # We take the features we have selected
 # # We convert them from easy-to-understand strings into a format the model expects
 # # e.g. We have a dataframe that maps the string 'Hoxton' to 0.324, 0.456456
@@ -216,10 +178,8 @@ if st.button('Predict'):
 # # We do st.write (f'{5} min wait)
 
 
-# background-color: #e5e5f7;
-# opacity: 0.8;
-# background: repeating-linear-gradient( 45deg, #fab87d, #fab87d 10.5px, #e5e5f7 10.5px, #e5e5f7 52.5px );
-# # #
+
+#
 
 # hoxton, hoxton, Mon, SA, EK01, 22214000
 # ENGLISH_DAY_TYPE, SERVICE_GROUP_CODE_AFFECTED, TRAIN_SERVICE_CODE_AFFECTED
