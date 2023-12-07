@@ -7,6 +7,7 @@ import pickle
 import datetime
 import os
 import flaml
+import base64
 
 st.set_page_config(page_title= "Ex-stream-ly Cool App",
      page_icon="🧊",
@@ -14,24 +15,27 @@ st.set_page_config(page_title= "Ex-stream-ly Cool App",
      initial_sidebar_state="expanded"
      )
 
-
-CSS  = '''
-<style>
-
-h1 {color:red;}.stApp {
-
-background-image: url(https://www.railadvent.co.uk/2017/12/night-overground-train-services-have-begun-in-london.html);
-background-size: cover;
-
-}
-</style>
-'''
-
-if st.checkbox('Inject CSS'):
-    st.write(f'<style>{CSS}</style>', unsafe_allow_html=True)
-#st.markdown('', unsafe_allow_html=True)
+# with open(os.path.join(os.getcwd(),'style.css')) as f:
+#     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 
+
+
+# def add_bg_from_local(image_file):
+#     with open(image_file, "rb") as image_file:
+#         encoded_string = base64.b64encode(image_file.read())
+#     st.markdown(
+#     f"""
+#     <style>
+#     .stApp {{
+#         background-image: url(data:image/{"png"};base64,{encoded_string.decode()});
+#         background-size: cover
+#     }}
+#     </style>
+#     """,
+#     unsafe_allow_html=True
+#     )
+# add_bg_from_local(os.path.join(os.getcwd(), 'pages', 'background.png'))
 
 
 
@@ -46,64 +50,103 @@ st.markdown("""# Train Delay Estimator
 df = pd.read_csv(os.path.abspath('lookup_for_streamlit.csv'))
 first_df = df[['Station Name']]
 
-col1, col2, col3, col4 = st.columns(4)
+
+#logo
+# st.image((os.path.join(os.getcwd(), 'pages', 'Overground-Logo.jpg')))
+
+col1, col2, col3 = st.columns(3)
 
 with col1:
     origin = st.selectbox(
      'Select your travel origin', first_df)
 
 with col2:
-    origin_date = st.date_input('origin_date', datetime.date.today())
+    origin_date = st.date_input('Origin date', datetime.date.today())
 
 with col3:
-    origin_time = st.time_input('origin_time', datetime.time(15, 00))
+    origin_time = st.time_input('Origin time', datetime.time(15, 00))
 
 col4, col5, col6 = st.columns(3)
 with col4:
     destination = st.selectbox('Select your travel destination ', first_df)
 
 with col5:
-    destination_date = st.date_input('destination_date', datetime.date.today())
+    destination_date = st.date_input('Destination date', datetime.date.today())
 
 with col6:
-    destination_time = st.time_input('destination_time', datetime.time(15, 30))
+    destination_time = st.time_input('Destination time', datetime.time(15, 30))
 
 
-train_service_code = st.selectbox(
-    'Pick a train service code',
-    ('22214000', '22204000', '21921000', '25234001', '21234001', '21252001',
-       '25235001', '22216000', '22206000', '21235001', '22218000', '22215003',
-       '21237001', '22215002'))
+col7, col8 =  st.columns(2)
 
-train_service_group_code = st.selectbox(
-    'Pick a previously affected group code',
-    ('EK01', 'EK02', 'EK03', 'EK04', 'EK05', 'EK99'))
+with col7:
+    train_service_code = st.selectbox(
+    'Select a train service code',
+    ('22214000 -- Richmond - Camden Road - Stratford', ' 22204000 -- Willesden - Kensington - Clapham Jct',
+
+     '21921000 -- Gospel Oak - Barking', '25234001 -- London Liverpool St - Cheshunt/Enfield Town (Peak)',
+
+     '21234001 --  London Liverpool St - Cheshunt/Enfield Town (Peak)','21252001 -- London Overground (West Anglia) ECS',
+
+    '25235001 -- 	London Liverpool St - Chingford Services (Peak)', '22216000 -- London Euston - Watford Junction (D.C Lines)',
+
+    '22206000 -- 	Queens Rd Peckham - Clapham Jct SLL' , '21235001 -- London Liverpool St - Chingford Services (Off Peak) ',
+
+    '22218000 -- ELL : (Tfl Infrastructure only-)' , '22215003 -- ELL: New X Gate-C Palace/W Croydon',
+
+    '21237001 -- Romford - Upminster', '22215002 -- ELL (ECS Movements) '))
+
+with col8:
+    train_service_group_code = st.selectbox(
+    'Select relevant train group code',
+    ('EK01 -- Orbitals',
+     'EK02 -- London-Watford (DC lines)',
+     'EK03 -- East London Lines',
+     'EK04 -- West Anglia Inner',
+     'EK05 -- Romford-Upminster',
+     'EK99 -- Miscellaneous'))
 
 
-Incident_reason = st.selectbox('Previous train incident reason',
-             ('A', 'D', 'F', 'I', 'J','M', 'O', 'Q', 'R','T', 'V', 'X', 'Z'))
+col9, col11 =  st.columns(2)
 
-with st.expander('click to see Description of Incident reason codes'):
-    st.write('A: Freight Terminal Operations Cause,\
-        D : Holding codes, \
-        F : Freight Operating Causes, \
-        I & J : Infrastructure reasons,\
-        M & N : Mechaical/Fleet Engineer causes,\
-        O : Network Rail Operating cause, \
-        Q : Network Rail Non-Operating, \
-        R : Station Operations,\
-        T : Passenger Operations, \
-        V : External events, \
-        X : External events linked to the network rail, \
-        Y : Reactionary delays, Z : Unexplained events/delays'
-)
+with col9:
+    Incident_reason = st.selectbox('Train incident reasons',
+             ('A - Freight Terminal Operations Cause',
+              'D - Holding codes',
+              'F - Freight Operating Causes',
+              'I - Infrastructure reasons',
+              'J - Infrastructure reasons',
+              'M - Mechaical/Fleet Engineer causes',
+              'O - Network Rail Operating cause',
+              'Q - Network Rail Non-Operating',
+              'R - Station Operations',
+              'T - Passenger Operations',
+              'V - External events',
+              'X -  External events linked to the network rail' ,
+              'Z - Unexplained events/delays'))
+
+# with st.expander('click to see Description of Incident reason codes'):
+#     st.write('A: Freight Terminal Operations Cause,\
+#         D : Holding codes, \
+#         F : Freight Operating Causes, \
+#         I & J : Infrastructure reasons,\
+#         M & N : Mechaical/Fleet Engineer causes,\
+#         O : Network Rail Operating cause, \
+#         Q : Network Rail Non-Operating, \
+#         R : Station Operations,\
+#         T : Passenger Operations, \
+#         V : External events, \
+#         X : External events linked to the network rail, \
+#         Y : Reactionary delays, Z : Unexplained events/delays'
+# )
 
 
-train_class_unit = st.selectbox('Pick a previously affected train unit class',
+with col11:
+    train_class_unit = st.selectbox('Select a train unit class',
              ('313', '317', '315', '321','375', '378', '710'))
 
 
-Applicable_Timetable = st.checkbox('Applicable-Timetable')
+Applicable_Timetable = st.checkbox('Is train in offcial performance records?')
 
 event_code = st.checkbox('Is the delay automatically logged?')
 
@@ -183,15 +226,14 @@ data = pd.DataFrame(data = { 'Lat_OR': [float(lat_OR)],
                          'UNIT_CLASS_AFFECTED' : [train_class_unit], 'PERFORMANCE_EVENT_CODE' : [code], 'ENGLISH_DAY_TYPE':[dayofweek]  }
 )
 
-
-
+# 3 - int(math.floor(math.log10(abs(result[0])))) - 1)
 # st.dataframe(data)
 if st.button('Predict'):
     processed = pipe.transform(data)
     # st.write(processed)
 
     result = model.predict(processed)
-    st.write(f'This train is estimated to be delayed by {round(result[0],1)} minutes')
+    st.write(f'This train is estimated to be delayed by {round(float(result[0]),1 )} minutes')
 # # We take the features we have selected
 # # We convert them from easy-to-understand strings into a format the model expects
 # # e.g. We have a dataframe that maps the string 'Hoxton' to 0.324, 0.456456
