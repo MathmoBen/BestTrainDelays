@@ -7,8 +7,6 @@ import pickle
 import datetime
 import os
 import flaml
-import st_pages
-from st_pages import Page, show_pages, add_page_title
 
 st.set_page_config(
         page_title="Home",
@@ -16,15 +14,6 @@ st.set_page_config(
         layout="wide",
         initial_sidebar_state="expanded"
         )
-
-
-show_pages(
-    [
-        Page(os.path.abspath('app.py'), "Home"),
-        Page(os.path.abspath('pages/About us.py'), "About us"),
-        Page(os.path.abspath('pages/data-analysis.py'), "Data Analysis"),
-    ]
-)
 
 
 # CSS  = '''
@@ -38,7 +27,6 @@ show_pages(
 # }
 # </style>
 # '''
-
 
 
 
