@@ -204,9 +204,9 @@ data = pd.DataFrame(data = { 'Lat_OR': [float(lat_OR)],
                             'DEST_MINUTE_SIN':[dest_minute_sin],'DEST_MINUTE_COS':[dest_minute_cos],
                             'Lat_DES': [float(lat_DES)],
                             'Lon_DES': [float(lon_DES)],
-                    'TRAIN_SERVICE_CODE_AFFECTED' : [train_service_code],\
-                     'SERVICE_GROUP_CODE_AFFECTED' : [train_service_group_code], 'APP_TIMETABLE_FLAG_AFF' :[app_time],
-                     'INCIDENT_REASON' : [Incident_reason],\
+                    'TRAIN_SERVICE_CODE_AFFECTED' : [train_service_code[:8]],\
+                     'SERVICE_GROUP_CODE_AFFECTED' : [train_service_group_code[:4]], 'APP_TIMETABLE_FLAG_AFF' :[app_time],
+                     'INCIDENT_REASON' : [Incident_reason[0]],\
                          'UNIT_CLASS_AFFECTED' : [train_class_unit], 'PERFORMANCE_EVENT_CODE' : [code], 'ENGLISH_DAY_TYPE':[dayofweek]  }
 )
 
