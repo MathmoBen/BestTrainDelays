@@ -11,7 +11,14 @@ st.set_page_config(
 
 ###############################CSS + HMTL Stuff for header #####################
 
-html = """
+background_style ="""
+.stApp {
+    background-color: white;
+    color: black;
+}
+    """
+
+html_header = """
 <div class="tw-relative tw-bg-primary tw-flex tw-items-end tw-h-40 md:tw-h-48 lg:tw-h-56 xl:tw-h-64 2xl:tw-h-72 snipcss-SsN7R">
   <div class="tw-container tw-relative tw-mb-8 md:tw-mb-12">
     <h1 class="tw-text-3xl md:tw-text-5xl lg:tw-text-6xl tw-font-bold tw-text-white">
@@ -22,7 +29,7 @@ html = """
 
  """
 
-css = """
+css_header = """
  @import url('https://fonts.googleapis.com/css?family=Noto+Sans:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap');
   body {
     font-family:"Noto Sans", sans-serif;
@@ -236,9 +243,10 @@ h1 {
   }
  """
 
-st.write(f'{html}', unsafe_allow_html=True)
+st.write(f'{html_header}', unsafe_allow_html=True)
+st.write(f'<style>{css_header}</style>', unsafe_allow_html=True)
+st.markdown(f'<style>{background_style}</style>', unsafe_allow_html=True)
 
-st.write(f'<style>{css}</style>', unsafe_allow_html=True)
 #################################################################################
 
 
