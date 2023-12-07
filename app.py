@@ -78,7 +78,7 @@ with col7:
     '25235001 -- London Liverpool St - Chingford Services (Peak)', '22216000 -- London Euston - Watford Junction (D.C Lines)',
     '22206000 -- Queens Rd Peckham - Clapham Jct SLL', '21235001 -- London Euston - Watford Junction (D.C Lines)',
     '22218000 -- ELL : (Tfl Infrastructure only-)', '22215003 -- ELL : New X Gate-C Palace/W Croydon',
-    '21237001 -- Romford - Upminster', '22215002 -- ELL (ECS Movements)'))
+    '21237001 -- Romford - Upminster', '22215002 -- ELL (ECS Movements)'), index=12)
 
 with col8:
     train_service_group_code = st.selectbox(
@@ -88,7 +88,7 @@ with col8:
      'EK03 -- East London Lines',
      'EK04 -- West Anglia Inner',
      'EK05 -- Romford-Upminster',
-     'EK99 -- Miscellaneous '))
+     'EK99 -- Miscellaneous '), index=2)
 
 
 col9, col11 = st.columns(2)
