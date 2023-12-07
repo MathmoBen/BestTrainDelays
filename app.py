@@ -12,7 +12,28 @@ st.set_page_config(page_title= "Ex-stream-ly Cool App",
      page_icon="🧊",
      layout="wide",
      initial_sidebar_state="expanded"
-    )
+     )
+
+
+CSS  = '''
+<style>
+
+h1 {color:red;}.stApp {
+
+background-image: url(https://www.railadvent.co.uk/2017/12/night-overground-train-services-have-begun-in-london.html);
+background-size: cover;
+
+}
+</style>
+'''
+
+if st.checkbox('Inject CSS'):
+    st.write(f'<style>{CSS}</style>', unsafe_allow_html=True)
+#st.markdown('', unsafe_allow_html=True)
+
+
+
+
 
 # model = pickle.load(open(os.path.abspath("Models/XGBoost_MSE_on_test_with_log_transf_1_27.sav"), 'rb'))
 model = pickle.load(open(os.path.abspath("Models/XGBoost_RMSE_on_test_with_log_transf_rmse_1_64.sav"), 'rb'))
@@ -62,8 +83,8 @@ train_service_group_code = st.selectbox(
 Incident_reason = st.selectbox('Previous train incident reason',
              ('A', 'D', 'F', 'I', 'J','M', 'O', 'Q', 'R','T', 'V', 'X', 'Z'))
 
-
-st.write('A: Freight Terminal Operations Cause,\
+with st.expander('click to see Description of Incident reason codes'):
+    st.write('A: Freight Terminal Operations Cause,\
         D : Holding codes, \
         F : Freight Operating Causes, \
         I & J : Infrastructure reasons,\
@@ -181,8 +202,10 @@ if st.button('Predict'):
 # # We do st.write (f'{5} min wait)
 
 
-
-#
+# background-color: #e5e5f7;
+# opacity: 0.8;
+# background: repeating-linear-gradient( 45deg, #fab87d, #fab87d 10.5px, #e5e5f7 10.5px, #e5e5f7 52.5px );
+# # #
 
 # hoxton, hoxton, Mon, SA, EK01, 22214000
 # ENGLISH_DAY_TYPE, SERVICE_GROUP_CODE_AFFECTED, TRAIN_SERVICE_CODE_AFFECTED
