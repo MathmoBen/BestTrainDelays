@@ -7,12 +7,24 @@ import pickle
 import datetime
 import os
 import flaml
+from st_pages import Page, show_pages, add_page_title
 
-st.set_page_config(page_title= "Ex-stream-ly Cool App",
-     page_icon="🧊",
-     layout="wide",
-     initial_sidebar_state="expanded"
-     )
+show_pages(
+    [
+        Page("app.py", "Home"),
+        Page("pages/About us.py", "About us"),
+        Page("pages/data-analysis.py", "Data Analysis"),
+    ]
+)
+
+
+
+st.set_page_config(
+        page_title="Home",
+        page_icon = "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.networkrail.co.uk/",
+        layout="wide",
+        initial_sidebar_state="expanded"
+        )
 
 
 CSS  = '''
