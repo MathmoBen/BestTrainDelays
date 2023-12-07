@@ -114,7 +114,7 @@ with col9:
 
 with col11:
     train_class_unit = st.selectbox('Select a train unit class',
-             ('313', '317', '315', '321','375', '378', '710'))
+             ('313', '317', '315', '321','375', '378', '710'), index=5)
 
 
 Applicable_Timetable = st.checkbox('Is train on official performance records?')
